@@ -15,12 +15,16 @@ export class AppComponent implements OnInit {
         userService.save(user);
 
         const returnUrl = localStorage.getItem('returnUrl');
-        router.navigateByUrl(returnUrl);
+        if (returnUrl) {
+          localStorage.removeItem('returnUrl');
+          router.navigateByUrl(returnUrl);
+        }
       }
     });
   }
 
   ngOnInit() {
-     // this.auth.logout();
+    // this.auth.logout();
   }
+    
 }

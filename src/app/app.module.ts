@@ -1,7 +1,12 @@
+import { ProductService } from './product.service';
+import { CategoryService } from './category.service';
 import { AdminAuthGuard } from './admin-auth-guard.service';
 import { UserService } from './user.service';
 import { AuthGuard } from './auth-guard.service';
 import { AuthService } from './auth.service';
+import { FormsModule } from '@angular/forms';
+import { CustomFormsModule } from 'ng2-validation';
+import { DataTableModule } from 'angular5-data-table';
 
 import { environment } from './../environments/environment';
 import { BrowserModule } from '@angular/platform-browser';
@@ -46,6 +51,9 @@ import { ProductFormComponent } from './admin/product-form/product-form.componen
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
     AngularFireAuthModule,
+    FormsModule,
+    CustomFormsModule,
+    DataTableModule.forRoot(),
     NgbModule.forRoot(),
     RouterModule.forRoot([
       { path: '', component: HomeComponent },
@@ -57,14 +65,20 @@ import { ProductFormComponent } from './admin/product-form/product-form.componen
       { path: 'order-success', component: OrderSuccessComponent, canActivate: [AuthGuard] },
       { path: 'my/orders', component: MyOrdersComponent, canActivate: [AuthGuard] },
 
+      
       { 
-        path: 'admin/products', 
-        component: AdminProductsComponent, 
+        path: 'admin/products/new', 
+        component: ProductFormComponent, 
         canActivate: [AuthGuard, AdminAuthGuard] 
       },
       { 
-        path: '/admin/products/new', 
+        path: 'admin/products/:id', 
         component: ProductFormComponent, 
+        canActivate: [AuthGuard, AdminAuthGuard] 
+      },
+      { 
+        path: 'admin/products', 
+        component: AdminProductsComponent, 
         canActivate: [AuthGuard, AdminAuthGuard] 
       },
       { 
@@ -79,7 +93,9 @@ import { ProductFormComponent } from './admin/product-form/product-form.componen
     AuthService,
     AuthGuard,
     UserService,
-    AdminAuthGuard
+    AdminAuthGuard,
+    CategoryService,
+    ProductService
   ],
   bootstrap: [AppComponent]
 })
