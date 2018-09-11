@@ -1,3 +1,7 @@
+import { Product } from './../models/product';
+import { ShoppingCart } from './../models/shopping-cart';
+import { Subscription } from 'rxjs';
+import { ShoppingCartService } from './../shopping-cart.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,9 +11,45 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ShoppingCartComponent implements OnInit {
 
-  constructor() { }
+  cart: ShoppingCart = new ShoppingCart(null);
+  shoppingCartItemCount: number;
+  // product: Product;
+  shoppingCart: ShoppingCart;
+  
+  constructor(private shoppingCartService: ShoppingCartService) { }
 
-  ngOnInit() {
+  addToCart(product: Product) {
+    this.shoppingCartService.addToCart(product);
+  }
+
+  removeFromCart(product: Product) {
+    this.shoppingCartService.removeFromCart(product);
+  }
+
+  getQuantity(product: Product) {
+    if (!this.cart) { return 0; }
+
+    const item = this.cart.itemsMap[product.key];
+    // console.log(this.cart.items);
+    return item ? item.quantity : 0;
+  }
+
+  clearCart() {
+    this.shoppingCartService.clearCart();
+  }
+  
+  async ngOnInit() {
+    const cart$ = await this.shoppingCartService.getCart();
+    cart$.subscribe( temp => {
+      // tslint:disable-next-line:prefer-const
+      let data: any;    
+      data = temp.payload.child('/items').val();
+      // data = temp.payload.val();
+      this.cart = new ShoppingCart(data);
+      this.shoppingCartItemCount = this.cart.totalItemsCount;
+      // console.log('data', data);
+      
+    });
   }
 
 }

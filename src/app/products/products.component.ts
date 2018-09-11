@@ -1,3 +1,4 @@
+import { ShoppingCart } from './../models/shopping-cart';
 import { ShoppingCartService } from './../shopping-cart.service';
 import { switchMap } from 'rxjs/operators';
 import { Product } from './../models/product';
@@ -16,45 +17,45 @@ export class ProductsComponent implements OnInit, OnDestroy {
 
   products: Product[] = [];
   filteredProducts: Product[];
-  cart: any;
+  cart: ShoppingCart;
   category: string;
   subscription: Subscription;
 
   constructor(
-    route: ActivatedRoute,
-    productService: ProductService,
+    private route: ActivatedRoute,
+    private productService: ProductService,
     private shoppingCartService: ShoppingCartService
-  ) {
-    
+  ) {}
 
-    productService.getAll()
-    .pipe(switchMap( products => {
-      let temp: any[];
-      temp = products;
-      this.products = temp; 
-      return route.queryParamMap;
-     })).subscribe(params => {
-        this.category = params.get('category');
-  
-        this.filteredProducts = (this.category) ?
-          this.products.filter(p => p.category === this.category) : 
-          this.products;
-      });
-      
-      
-    }
+  async ngOnInit() {
+    this.subscription = (await this.shoppingCartService.getCart())
+    .subscribe(cart => {
+      let temp: any;
+      temp = cart.payload.child('/items').val();
+      this.cart = new ShoppingCart(temp);
+      // this.cart = temp;
+      // console.log(this.cart);
+    });
 
-    async ngOnInit() {
-      this.subscription = (await this.shoppingCartService.getCart())
-      .subscribe(cart => {
-        this.cart = cart.payload.val();
-        // console.log(this.cart);
-      });
-    }
+  this.productService.getAll()
+  .pipe(switchMap( products => {
+    let temp: any[];
+    temp = products;
+    this.products = temp; 
+    return this.route.queryParamMap;
+    }))
+    .subscribe(params => {
+      this.category = params.get('category');
 
-    ngOnDestroy() {
-      this.subscription.unsubscribe();
-    }
+      this.filteredProducts = (this.category) ?
+        this.products.filter(p => p.category === this.category) : 
+        this.products;
+    }); 
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
 
   // constructor(
   //   route: ActivatedRoute,

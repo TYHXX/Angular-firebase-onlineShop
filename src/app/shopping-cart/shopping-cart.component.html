@@ -1,3 +1,60 @@
-<p>
-  shopping-cart works!
-</p>
+<h1>Shopping Cart</h1>
+<div class="row col-10">
+  <p>
+      You have {{cart.totalItemsCount}} items in your shopping cart.
+  </p>
+  <table class="table">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Product</th>
+        <th class="text-center" style="width: 230px">Quantity</th>
+        <th class="text-right" style="width: 200px">Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of cart.items">
+        <td>
+          <div [style.backgroundImage]="'url(' + item.product.imageUrl + ')'" class="thumbnail" alt=""></div>
+        </td>
+        <td>
+          {{ item.product.title}}
+        </td>
+        <td>
+            <!-- {{ item.quantity}}  -->
+
+            <div class="row no-gutters">
+              <div class="col-2">
+                <button
+                  (click)="removeFromCart(item.product)" 
+                  class="btn btn-secondary btn-block">-</button>
+              </div>
+              <div class="col text-center">{{ getQuantity(item.product) }} in cart </div>
+              <div class="col-2">
+                  <button 
+                    (click)="addToCart(item.product)"
+                    class="btn btn-secondary btn-block">+</button>
+              </div>
+            </div>
+
+            <!-- <product-quantity [shopping-cart]="cart" [product]="item.product"></product-quantity> -->
+        </td>
+        <td class="text-right">
+          {{ item.totalPrice | currency:'SGD':symbol}}
+        </td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th class="text-right">{{cart.totalPrice | currency:'SGD':symbol}}</th>
+      </tr>
+    </tfoot>
+  </table>
+  <button
+    (click)="clearCart()"
+    class="btn btn-danger btn-sm">Clear Shopping Cart</button>
+</div>
+

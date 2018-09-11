@@ -12,7 +12,7 @@
       (click)="addToCart()" 
       class="btn btn-secondary btn-block">Add to Cart</button>
     <ng-template #updateQuantity>
-      <div class="row no-gutters">
+      <!-- <div class="row no-gutters">
         <div class="col-2">
           <button
             (click)="removeFromCart()" 
@@ -24,7 +24,8 @@
               (click)="addToCart()"
               class="btn btn-secondary btn-block">+</button>
         </div>
-      </div>
+      </div> -->
+      <product-quantity [shopping-cart]="shoppingCart" [product]="product"></product-quantity>
     </ng-template> 
   </div>
 </div>
