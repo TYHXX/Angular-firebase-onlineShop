@@ -12,6 +12,13 @@ export class ShoppingCartService {
 
   constructor(private db: AngularFireDatabase) { }
 
+  // async getCart(): Promise<Observable<ShoppingCart>> {
+  //   const cartId = await this.getOrCreatCartId();
+  //   return this.db.object('/shopping-carts/' + cartId).snapshotChanges().pipe(
+  //     map(x => new ShoppingCart(x.payload))
+  //   );
+  // }
+  
   async getCart() {
     const cartId = await this.getOrCreatCartId();
     return this.db.object('/shopping-carts/' + cartId).snapshotChanges();
@@ -52,12 +59,7 @@ export class ShoppingCartService {
   }
 
 
-  // async getCart(): Promise<Observable<ShoppingCart>> {
-  //   const cartId = await this.getOrCreatCartId();
-  //   return this.db.object('/shopping-carts/' + cartId).snapshotChanges().pipe(
-  //     map(x => new ShoppingCart(x.payload))
-  //   );
-  // }
+  
   
 
   private getItem(cartId: string, productId: string) {
