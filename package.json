@@ -30,8 +30,8 @@
     "font-awesome": "^4.7.0",
     "g": "^2.0.1",
     "ng2-validation": "^4.2.0",
-    "rxjs-compat": "^6.3.2",
     "rxjs": "^6.0.0",
+    "rxjs-compat": "^6.3.2",
     "zone.js": "^0.8.26"
   },
   "devDependencies": {
